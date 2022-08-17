@@ -5,6 +5,7 @@ public class Contribution
     private int firstLine;
     private int lastLine;
     private boolean addition;
+    private boolean newlyCreated;
     private Commit commit;
     private SourceFile sfile;
 
@@ -18,6 +19,7 @@ public class Contribution
         this.firstLine = firstLine;
         this.lastLine = lastLine;
         this.addition = isAddition;
+        this.newlyCreated = true;
         this.commit = commit;
 
         // TODO: Source file identification.
@@ -41,5 +43,15 @@ public class Contribution
     public Commit getCommit()
     {
         return this.commit;
+    }
+
+    public boolean isNew()
+    {
+        return this.newlyCreated;
+    }
+
+    public void setNew(final boolean isNew)
+    {
+        this.newlyCreated = false;
     }
 }

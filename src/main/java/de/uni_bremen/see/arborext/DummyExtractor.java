@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class DummyExtractor extends Extractor
 {
-    DummyExtractor(String repository)
+    DummyExtractor(String repository) throws ExtractionError
     {
         super(repository);
     }
 
     @Override
-    protected void cloneRepository()
+    protected void cloneRepository() throws ExtractionError
     {
         // Nothing to do
     }
@@ -23,13 +23,13 @@ public class DummyExtractor extends Extractor
     }
 
     @Override
-    protected List<Commit> getRawCommits()
+    protected List<Commit> getRawCommits() throws ExtractionError
     {
         return null;
     }
 
     @Override
-    protected void enrichWithContributions(Commit commit)
+    protected void enrichWithContributions(Commit commit) throws ExtractionError
     {
         // TODO
     }

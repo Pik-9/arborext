@@ -51,6 +51,13 @@ public class SourceFile
         this.contributions.add(contribution);
     }
 
+    public void setEverythingOld()
+    {
+        for (Contribution cont : this.contributions) {
+            cont.setNew(false);
+        }
+    }
+
     static SourceFile getSourceFile(final String filename)
     {
         int index = pathToFiles.indexOf(filename);
