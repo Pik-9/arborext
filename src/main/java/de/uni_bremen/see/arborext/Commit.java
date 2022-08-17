@@ -2,6 +2,8 @@ package de.uni_bremen.see.arborext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Date;
 
 public class Commit
@@ -11,8 +13,10 @@ public class Commit
     private Date date;
     private String commitMessage;
     private int branchId;
-    private List<Commit> parentCommits;
-    private List<Commit> childCommits;
+    private List<String> parentCommits;
+    private List<String> childCommits;
+
+    static protected HashMap<String, Commit> commitHashes = new HashMap<String, Commit> ();
 
     public Commit(
         final String hash,
@@ -25,8 +29,10 @@ public class Commit
         this.date = date;
         this.commitMessage = commitMessage;
         this.branchId = 0;
-        this.parentCommits = new ArrayList<Commit> ();
-        this.childCommits = new ArrayList<Commit> ();
+        this.parentCommits = new ArrayList<String> ();
+        this.childCommits = new ArrayList<String> ();
+
+        commitHashes.put(this.hash, this);
     }
 
     public String getHash()
@@ -57,5 +63,35 @@ public class Commit
     public boolean isMerge()
     {
         return this.parentCommits.size() > 1;
+    }
+
+    public void addParentCommit(final String parentHash)
+    {
+        this.parentCommits.add(parentHash);
+    }
+
+    public void addChildCommit(final String childHash)
+    {
+        this.childCommits.add(childHash);
+    }
+
+    public List<Commit> getParents()
+    {
+        List<Commit> ret = new ArrayList<Commit> ();
+        for (String phash : this.parentCommits) {
+            ret.add(commitHashes.get(phash));
+        }
+
+        return ret;
+    }
+
+    public List<Commit> getChildren()
+    {
+        List<Commit> ret = new ArrayList<Commit> ();
+        for (String chash : this.childCommits) {
+            ret.add(commitHashes.get(chash));
+        }
+
+        return ret;
     }
 }
