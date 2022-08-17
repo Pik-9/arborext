@@ -51,14 +51,29 @@ public class SourceFile
         this.contributions.add(contribution);
     }
 
-    public void setEverythingOld()
+    static public void setEverythingOld()
     {
-        for (Contribution cont : this.contributions) {
-            cont.setNew(false);
+        for (SourceFile sf : pathToFiles) {
+            for (Contribution cont : sf.getContributions()) {
+                cont.setNew(false);
+            }
         }
     }
 
-    static SourceFile getSourceFile(final String filename)
+    static public List<Contribution> getAllContributionsFromBranch(final int branchId)
+    {
+        List<Contribution> ret = new ArrayList<Contribution> ();
+        for (SourceFile sf : pathToFiles) {
+            for (Contribution cont : sf.getContributions()) {
+                if (cont.getCommit().getBranchId() == branchId) {
+                    ret.add(cont);
+                }
+            }
+        }
+        return ret;
+    }
+
+    static public SourceFile getSourceFile(final String filename)
     {
         int index = pathToFiles.indexOf(filename);
         SourceFile ret = null;

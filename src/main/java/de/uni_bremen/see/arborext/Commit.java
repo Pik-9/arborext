@@ -15,6 +15,7 @@ public class Commit
     private int branchId;
     private List<String> parentCommits;
     private List<String> childCommits;
+    private List<Contribution> contributions;
 
     static protected HashMap<String, Commit> commitHashes = new HashMap<String, Commit> ();
 
@@ -31,6 +32,7 @@ public class Commit
         this.branchId = 0;
         this.parentCommits = new ArrayList<String> ();
         this.childCommits = new ArrayList<String> ();
+        this.contributions = new ArrayList<Contribution> ();
 
         commitHashes.put(this.hash, this);
     }
@@ -58,6 +60,11 @@ public class Commit
     public int getBranchId()
     {
         return this.branchId;
+    }
+
+    public void setBranchId(final int branchId)
+    {
+        this.branchId = branchId;
     }
 
     public boolean isMerge()
@@ -93,5 +100,15 @@ public class Commit
         }
 
         return ret;
+    }
+
+    public List<Contribution> getContributions()
+    {
+        return this.contributions;
+    }
+
+    public void addContribution(Contribution contribution)
+    {
+        this.contributions.add(contribution);
     }
 }

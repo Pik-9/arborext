@@ -22,7 +22,10 @@ public class Contribution
         this.newlyCreated = true;
         this.commit = commit;
 
-        // TODO: Source file identification.
+        this.sfile = SourceFile.getSourceFile(sourceFilePath);
+        sfile.addContribution(this);
+
+        this.commit.addContribution(this);
     }
 
     public int getFirstLine()
