@@ -1,6 +1,9 @@
 package de.uni_bremen.see.arborext;
 
 import java.util.List;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * Hello world!
@@ -10,12 +13,15 @@ public class App
 {
     public static void main( String[] args )
     {
+        Extractor ext = null;
+        List<Commit> commits = null;
+
         try {
-            Extractor ext = new DummyExtractor("blank");
-            List<Commit> commits = ext.extractCommits();
+            ext = new DummyExtractor("blank");
+            commits = ext.extractCommits();
 
             for (Commit cmmt : commits) {
-                ext.enrichWithContributions(cmmt);
+                //ext.enrichWithContributions(cmmt);
             }
 
             for (Commit cmmt : commits) {
@@ -25,6 +31,22 @@ public class App
             }
 
             ext.tidyUp();
+        } catch (Exception exc) {
+            System.err.println("ERROR: " + exc.getMessage());
+            System.exit(1);
+        }
+
+        try {
+            GXLWriter.writeCommitsInGXL(commits, ext);
+        } catch(ParserConfigurationException exc) {
+            System.err.println("Parser error: " + exc.getMessage());
+            System.exit(1);
+        } catch(TransformerException exc) {
+            System.err.println("Transformer error: " + exc.getMessage());
+            System.exit(1);
+        } catch(IOException exc) {
+            System.err.println("IO error: " + exc.getMessage());
+            System.exit(1);
         } catch (Exception exc) {
             System.err.println("ERROR: " + exc.getMessage());
             System.exit(1);

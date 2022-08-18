@@ -5,19 +5,27 @@ import java.util.ArrayList;
 
 public class SourceFile
 {
+    private int id;
     private int loc;
     private List<String> knownNames;
     private List<Contribution> contributions;
 
+    protected static int newId = 1;
     protected static List<SourceFile> pathToFiles = new ArrayList<SourceFile> ();
 
     protected SourceFile(final String name)
     {
+        this.id = newId++;
         this.loc = 0;
         this.knownNames = new ArrayList<String> ();
         this.knownNames.add(name);
         this.contributions = new ArrayList<Contribution> ();
         pathToFiles.add(this);
+    }
+
+    public String getId()
+    {
+        return "F" + Integer.toString(this.id);
     }
 
     public int getLOC()
@@ -51,6 +59,22 @@ public class SourceFile
         this.contributions.add(contribution);
     }
 
+    public String getNames()
+    {
+        if (this.knownNames.size() > 1) {
+            String ret = "";
+            for (int ii = 0; ii < this.knownNames.size(); ++ii) {
+                ret += this.knownNames.get(ii);
+                if(ii < this.knownNames.size() - 1) {
+                    ret += ", ";
+                }
+            }
+            return ret;
+        } else {
+            return this.knownNames.get(0);
+        }
+    }
+
     static public void setEverythingOld()
     {
         for (SourceFile sf : pathToFiles) {
@@ -75,15 +99,24 @@ public class SourceFile
 
     static public SourceFile getSourceFile(final String filename)
     {
-        int index = pathToFiles.indexOf(filename);
         SourceFile ret = null;
-        if (index == -1) {
+        for (SourceFile sf : pathToFiles) {
+            if (sf.goesByThisName(filename)) {
+                ret = sf;
+                break;
+            }
+        }
+
+        if (ret == null) {
             ret = new SourceFile(filename);
-        } else {
-            ret = pathToFiles.get(index);
         }
 
         return ret;
+    }
+
+    static public List<SourceFile> getAllFiles()
+    {
+        return pathToFiles;
     }
 
     @Override
