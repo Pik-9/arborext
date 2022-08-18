@@ -111,4 +111,50 @@ public class Commit
     {
         this.contributions.add(contribution);
     }
+
+    public void fillChildren()
+    {
+        for (Commit com : this.getParents()) {
+            com.addChildCommit(this.hash);
+        }
+    }
+
+    public int countParents()
+    {
+        return this.parentCommits.size();
+    }
+
+    public int countChildren()
+    {
+        return this.childCommits.size();
+    }
+
+    @Override
+    public String toString()
+    {
+        String ret = "Commit:  " + this.hash + "\n";
+        ret += "Author:  " + this.authorName + "\n";
+        ret += "Date:    " + this.date + "\n";
+        ret += "Msg:     " + this.commitMessage + "\n";
+        ret += "Branch:  " + Integer.toString(this.branchId) + "\n";
+        ret += "Parents:";
+
+        for (String phash : this.parentCommits) {
+            ret += " " + phash;
+        }
+
+        ret += "\nChildren:";
+
+        for (String chash : this.childCommits) {
+            ret += " " + chash;
+        }
+
+        ret += "\nContributions:\n";
+
+        for (Contribution cont : this.contributions) {
+            ret += cont.toString() + "\n";
+        }
+
+        return ret;
+    }
 }

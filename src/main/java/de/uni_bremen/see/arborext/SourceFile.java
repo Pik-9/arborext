@@ -85,4 +85,17 @@ public class SourceFile
 
         return ret;
     }
+
+    @Override
+    public String toString()
+    {
+        String ret = "[";
+        for (String kname : this.knownNames) {
+            ret += kname + ", ";
+        }
+        ret += "] -> ";
+        ret += Integer.toString(this.loc);
+
+        return ret;
+    }
 }

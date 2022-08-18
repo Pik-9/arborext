@@ -20,7 +20,7 @@ public class DummyExtractor extends Extractor
     }
 
     @Override
-    protected void tidyUp()
+    public void tidyUp()
     {
         // Nothing to do
     }
@@ -39,30 +39,30 @@ public class DummyExtractor extends Extractor
             Commit ce = new Commit("E", "Charles", df.parse("05.01.2022 12:00"), "Add Mars.");
             Commit cf = new Commit("F", "Alice", df.parse("06.01.2022 12:00"), "Merge Venus into Mercury and Mars.");
 
-            ca.addChildCommit("B");
+            //ca.addChildCommit("B");
 
             cb.addParentCommit("A");
-            cb.addChildCommit("C");
-            cb.addChildCommit("D");
+            //cb.addChildCommit("C");
+            //cb.addChildCommit("D");
 
             cc.addParentCommit("B");
-            cc.addChildCommit("F");
+            //cc.addChildCommit("F");
 
             cd.addParentCommit("B");
-            cd.addChildCommit("E");
-            cd.addChildCommit("F");
+            //cd.addChildCommit("E");
+            //cd.addChildCommit("F");
 
             ce.addParentCommit("D");
 
             cf.addParentCommit("D");
             cf.addParentCommit("C");
 
-            ca.setBranchId(1);
-            cb.setBranchId(1);
-            cc.setBranchId(2);
-            cd.setBranchId(1);
-            ce.setBranchId(3);
-            cf.setBranchId(1);
+            //ca.setBranchId(1);
+            //cb.setBranchId(1);
+            //cc.setBranchId(2);
+            //cd.setBranchId(1);
+            //ce.setBranchId(3);
+            //cf.setBranchId(1);
 
             ret.add(ca);
             ret.add(cb);
@@ -79,7 +79,7 @@ public class DummyExtractor extends Extractor
     }
 
     @Override
-    protected void enrichWithContributions(Commit commit) throws ExtractionError
+    public void enrichWithContributions(Commit commit) throws ExtractionError
     {
         SourceFile.setEverythingOld();
 

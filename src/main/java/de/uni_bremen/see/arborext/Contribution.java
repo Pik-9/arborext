@@ -57,4 +57,25 @@ public class Contribution
     {
         this.newlyCreated = false;
     }
+
+    @Override
+    public String toString()
+    {
+        String ret = this.commit.getHash();
+        if (this.newlyCreated) {
+            ret += "*";
+        }
+
+        ret += " {" + this.sfile.toString() + "} ";
+
+        if (this.addition) {
+            ret += "+";
+        } else {
+            ret += "-";
+        }
+
+        ret += "[" + Integer.toString(this.firstLine) + ".." + Integer.toString(this.lastLine) + "]";
+
+        return ret;
+    }
 }
