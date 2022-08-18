@@ -17,6 +17,28 @@ public class App
         List<Commit> commits = null;
 
         try {
+            ext = new GitExtractor("https://codeberg.org/Pik-9/scan2rpdf.git");
+            commits = ext.extractCommits();
+        } catch (ExtractionError exc) {
+            System.err.println("ERROR: " + exc.getMessage());
+            System.exit(1);
+        }
+
+        for (Commit cmmt : commits) {
+            System.out.println("+------------------------+");
+            System.out.println(cmmt.toString());
+            System.out.println("+------------------------+");
+        }
+
+        try {
+            ext.tidyUp();
+        } catch (IOException exc) {
+            System.err.println("ERROR: Could not tidy up:" + exc.getMessage());
+            System.exit(1);
+        }
+
+        /*
+        try {
             ext = new DummyExtractor("blank");
             commits = ext.extractCommits();
 
@@ -51,5 +73,6 @@ public class App
             System.err.println("ERROR: " + exc.getMessage());
             System.exit(1);
         }
+        */
     }
 }

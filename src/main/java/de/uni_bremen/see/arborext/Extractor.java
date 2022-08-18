@@ -3,6 +3,8 @@ package de.uni_bremen.see.arborext;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
+
 public abstract class Extractor
 {
     protected String repoUrl;
@@ -77,7 +79,10 @@ public abstract class Extractor
 
     abstract protected void cloneRepository() throws ExtractionError;
     abstract protected List<Commit> getRawCommits() throws ExtractionError;
-
-    abstract public void tidyUp();
     abstract public void enrichWithContributions(Commit commit) throws ExtractionError;
+
+    public void tidyUp() throws java.io.IOException
+    {
+        FileUtils.deleteDirectory(new java.io.File("tmprepo"));
+    }
 }

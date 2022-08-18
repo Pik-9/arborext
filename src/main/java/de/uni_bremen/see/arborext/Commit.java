@@ -74,12 +74,16 @@ public class Commit
 
     public void addParentCommit(final String parentHash)
     {
-        this.parentCommits.add(parentHash);
+        if (!parentHash.isEmpty()) {
+            this.parentCommits.add(parentHash);
+        }
     }
 
     public void addChildCommit(final String childHash)
     {
-        this.childCommits.add(childHash);
+        if (!childHash.isEmpty()) {
+            this.childCommits.add(childHash);
+        }
     }
 
     public List<Commit> getParents()
