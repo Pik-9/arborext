@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.List;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,6 +16,17 @@ import java.io.IOException;
 
 public class GXLWriter
 {
+    static private Element createAttrNode(Document doc, final String name, final String type, final String value)
+    {
+        Element node = doc.createElement("attr");
+        node.setAttribute("name", name);
+        Element valAttr = doc.createElement(type);
+        valAttr.setTextContent(value);
+        node.appendChild(valAttr);
+
+        return node;
+    }
+
     static private Document docFromCommit(Commit commit, DocumentBuilder builder)
     {
         Document doc = builder.newDocument();
@@ -35,16 +47,19 @@ public class GXLWriter
             devNode.setAttribute("id", dev.getId());
             Element nodeType = doc.createElement("type");
             nodeType.setAttribute("xlink:href", "Developer");
-            Element devName = doc.createElement("attr");
-            devName.setAttribute("name", "Developer.Name");
-            Element devNameString = doc.createElement("string");
-            devNameString.setTextContent(dev.getName());
 
-            devName.appendChild(devNameString);
             devNode.appendChild(nodeType);
-            devNode.appendChild(devName);
+            devNode.appendChild(createAttrNode(doc, "Developer.Name", "string", dev.getName()));
             graphNode.appendChild(devNode);
         }
+
+        // The contribution nodes should be added after the file nodes.
+        List<Element> contributionNodes = new ArrayList<Element> ();
+
+        // The edges should be added after the nodes
+        List<Element> edges = new ArrayList<Element> ();
+
+        int newEdgeId = 1;
 
         // Files
         for (SourceFile sf : SourceFile.getAllFiles()) {
@@ -53,50 +68,53 @@ public class GXLWriter
             Element fileNodeType = doc.createElement("type");
             fileNodeType.setAttribute("xlink:href", "File");
 
-            Element snameAttr = doc.createElement("attr");
-            snameAttr.setAttribute("name", "Source.Name");
-            Element valAttr = doc.createElement("string");
-            valAttr.setTextContent(sf.getNames());
-            snameAttr.appendChild(valAttr);
-
-            Element linkageAttr = doc.createElement("attr");
-            linkageAttr.setAttribute("name", "Linkage.Name");
-            valAttr = doc.createElement("string");
-            valAttr.setTextContent(sf.getNames());
-            linkageAttr.appendChild(valAttr);
-
-            Element mCoR = doc.createElement("attr");
-            mCoR.setAttribute("name", "Metric.Number_Of_Calling_Routines");
-            valAttr = doc.createElement("int");
-            valAttr.setTextContent("0");
-            mCoR.appendChild(valAttr);
-
-            Element mCR = doc.createElement("attr");
-            mCR.setAttribute("name", "Metric.Number_Of_Called_Routines");
-            valAttr = doc.createElement("int");
-            valAttr.setTextContent("0");
-            mCR.appendChild(valAttr);
-
-            Element mccabe = doc.createElement("attr");
-            mccabe.setAttribute("name", "Metric.McCabe_Complexity");
-            valAttr = doc.createElement("int");
-            valAttr.setTextContent("1");
-            mccabe.appendChild(valAttr);
-
-            Element loc = doc.createElement("attr");
-            loc.setAttribute("name", "Metric.Lines.LOC");
-            valAttr = doc.createElement("int");
-            valAttr.setTextContent(Integer.toString(sf.getLOC()));
-            loc.appendChild(valAttr);
-
-            fileNode.appendChild(fileNodeType);
-            fileNode.appendChild(snameAttr);
-            fileNode.appendChild(linkageAttr);
-            fileNode.appendChild(mCoR);
-            fileNode.appendChild(mCR);
-            fileNode.appendChild(mccabe);
-            fileNode.appendChild(loc);
+            fileNode.appendChild(createAttrNode(doc, "Source.Name", "string", sf.getNames()));
+            fileNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", sf.getNames()));
+            fileNode.appendChild(createAttrNode(doc, "Metric.Number_Of_Calling_Routines", "int", "0"));
+            fileNode.appendChild(createAttrNode(doc, "Metric.Number_Of_Called_Routines", "int", "0"));
+            fileNode.appendChild(createAttrNode(doc, "Metric.McCabe_Complexity", "int", "1"));
+            fileNode.appendChild(createAttrNode(doc, "Metric.Lines.LOC", "int", Integer.toString(sf.getLOC())));
             graphNode.appendChild(fileNode);
+
+            // Contributions
+            for (Contribution cont : sf.getContributions()) {
+                Element cNode = doc.createElement("node");
+                cNode.setAttribute("id", cont.getId());
+                Element contNodeType = doc.createElement("type");
+                contNodeType.setAttribute("xlink:href", "Contribution");
+
+                cNode.appendChild(createAttrNode(doc, "Metric.Lines.FirstLine", "int", Integer.toString(cont.getFirstLine())));
+                cNode.appendChild(createAttrNode(doc, "Metric.Lines.LastLine", "int", Integer.toString(cont.getLastLine())));
+                cNode.appendChild(createAttrNode(doc, "Metric.Lines.LOC", "int", Integer.toString(cont.getLOC())));
+                cNode.appendChild(createAttrNode(doc, "Contribution.FileId", "string", sf.getId()));
+                cNode.appendChild(createAttrNode(doc, "Info.CommitId", "string", cont.getCommit().getHash()));
+                cNode.appendChild(createAttrNode(doc, "Info.CommitAuthor", "string", cont.getCommit().getAuthor()));
+                cNode.appendChild(createAttrNode(doc, "Info.CommitMessage", "string", cont.getCommit().getCommitMessage()));
+                cNode.appendChild(createAttrNode(doc, "Info.CommitTimestamp", "string", cont.getCommit().getDate().toString()));
+                cNode.appendChild(createAttrNode(doc, "Info.Branch", "int", Integer.toString(cont.getCommit().getBranchId())));
+
+                contributionNodes.add(cNode);
+
+                // Edge for contributions that were added with this commit.
+                if (cont.isNew()) {
+                    Element cEdge = doc.createElement("edge");
+                    cEdge.setAttribute("id", "E" + Integer.toString(newEdgeId++));
+                    cEdge.setAttribute("from", Developer.probeDeveloper(cont.getCommit().getAuthor()).getId());
+                    cEdge.setAttribute("to", cont.getId());
+                    Element cEdgeType = doc.createElement("type");
+                    cEdgeType.setAttribute("xlink:href", "Call");
+                    cEdge.appendChild(cEdgeType);
+                    edges.add(cEdge);
+                }
+            }
+        }
+
+        for (Element ele : contributionNodes) {
+            graphNode.appendChild(ele);
+        }
+
+        for (Element ele : edges) {
+            graphNode.appendChild(ele);
         }
 
         return doc;

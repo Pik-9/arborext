@@ -2,12 +2,15 @@ package de.uni_bremen.see.arborext;
 
 public class Contribution
 {
+    private int id;
     private int firstLine;
     private int lastLine;
     private boolean addition;
     private boolean newlyCreated;
     private Commit commit;
     private SourceFile sfile;
+
+    static protected int newId = 1;
 
     public Contribution(
         final int firstLine,
@@ -16,6 +19,7 @@ public class Contribution
         final Commit commit,
         final String sourceFilePath
     ) {
+        this.id = newId++;
         this.firstLine = firstLine;
         this.lastLine = lastLine;
         this.addition = isAddition;
@@ -28,6 +32,11 @@ public class Contribution
         this.commit.addContribution(this);
     }
 
+    public String getId()
+    {
+        return "C" + Integer.toString(this.id);
+    }
+
     public int getFirstLine()
     {
         return this.firstLine;
@@ -36,6 +45,11 @@ public class Contribution
     public int getLastLine()
     {
         return this.lastLine;
+    }
+
+    public int getLOC()
+    {
+        return this.lastLine - this.firstLine + 1;
     }
 
     public boolean isAddition()

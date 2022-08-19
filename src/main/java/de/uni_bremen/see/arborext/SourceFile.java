@@ -51,9 +51,9 @@ public class SourceFile
     public void addContribution(Contribution contribution)
     {
         if (contribution.isAddition()) {
-            this.loc += contribution.getLastLine() - contribution.getFirstLine() + 1;
+            this.loc += contribution.getLOC();
         } else {
-            this.loc -= contribution.getLastLine() - contribution.getFirstLine() + 1;
+            this.loc -= contribution.getLOC();
         }
 
         this.contributions.add(contribution);
