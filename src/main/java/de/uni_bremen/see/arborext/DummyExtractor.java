@@ -24,9 +24,9 @@ import java.text.ParseException;
 
 public class DummyExtractor extends Extractor
 {
-    DummyExtractor(String repository) throws ExtractionError
+    DummyExtractor() throws ExtractionError
     {
-        super(repository);
+        super("");
     }
 
     @Override

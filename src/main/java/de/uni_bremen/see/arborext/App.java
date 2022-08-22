@@ -73,7 +73,7 @@ public class App
                 System.out.println("Mercurial is currentyly not supported.");
                 System.exit(0);
             } else if (vcsType.equals("dummy")) {
-                ext = new DummyExtractor(path);
+                ext = new DummyExtractor();
             } else {
                 System.err.println("ERROR: Unknwon protocol: " + vcsType);
                 System.exit(1);
