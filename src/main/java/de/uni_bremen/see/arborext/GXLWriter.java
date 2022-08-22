@@ -91,7 +91,7 @@ public class GXLWriter
                 cNode.appendChild(createAttrNode(doc, "Info.CommitAuthor", "string", cont.getCommit().getAuthor()));
                 cNode.appendChild(createAttrNode(doc, "Info.CommitMessage", "string", cont.getCommit().getCommitMessage()));
                 cNode.appendChild(createAttrNode(doc, "Info.CommitTimestamp", "string", cont.getCommit().getDate().toString()));
-                cNode.appendChild(createAttrNode(doc, "Info.Branch", "int", Integer.toString(cont.getCommit().getBranchId())));
+                cNode.appendChild(createAttrNode(doc, "Info.Branch", "int", Integer.toString(cont.getBranchId())));
 
                 contributionNodes.add(cNode);
 

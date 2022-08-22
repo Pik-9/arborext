@@ -72,6 +72,11 @@ public class Contribution
         this.newlyCreated = false;
     }
 
+    public int getBranchId()
+    {
+        return this.commit.getBranchId();
+    }
+
     @Override
     public String toString()
     {
