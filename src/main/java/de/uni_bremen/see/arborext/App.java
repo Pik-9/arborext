@@ -24,8 +24,7 @@ import javax.xml.transform.TransformerException;
 import org.apache.commons.cli.*;
 
 /**
- * Hello world!
- *
+ * The main application.
  */
 public class App 
 {
@@ -91,15 +90,10 @@ public class App
             System.exit(1);
         }
 
-        // Only for debugging
-        for (Commit cmmt : commits) {
-            System.out.println("+------------------------+");
-            System.out.println(cmmt.toString());
-            System.out.println("+------------------------+");
-        }
-
         try {
+            System.out.println("Writing to GXL files...");
             GXLWriter.writeCommitsInGXL(commits, ext);
+            System.out.println("Done.");
         } catch(ParserConfigurationException exc) {
             System.err.println("Parser error: " + exc.getMessage());
             System.exit(1);
@@ -115,6 +109,7 @@ public class App
         }
 
         try {
+            System.out.println("All done. Tidying up...");
             ext.tidyUp();
         } catch (IOException exc) {
             System.err.println("ERROR: Could not tidy up:" + exc.getMessage());

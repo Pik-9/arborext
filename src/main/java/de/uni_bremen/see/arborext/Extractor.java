@@ -30,7 +30,9 @@ public abstract class Extractor
     public Extractor(final String repository) throws ExtractionError
     {
         this.repoUrl = repository;
+        System.out.println("Start cloning...");
         this.cloneRepository();
+        System.out.println("Done cloning.");
     }
 
     private void assignBranchId(Commit cmmt)
