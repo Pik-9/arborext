@@ -146,6 +146,7 @@ public class GitExtractor extends Extractor
 
         if (commit.isMerge()) {
             for (Commit parent : commit.getParents()) {
+                // TODO: The whole branch, not just one commit.
                 parent.setBranchId(commit.getBranchId());
             }
 
