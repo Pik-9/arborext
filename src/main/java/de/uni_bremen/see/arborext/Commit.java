@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
 
+/**
+ * A single commit in the version history.
+ */
 public class Commit
 {
     private String hash;
@@ -35,6 +38,12 @@ public class Commit
 
     static protected HashMap<String, Commit> commitHashes = new HashMap<String, Commit> ();
 
+    /**
+     * @param hash the identifier of the commit (a hash in git's case).
+     * @param author the author name of the commit.
+     * @param date the commit date.
+     * @param commitMessage the commit message.
+     */
     public Commit(
         final String hash,
         final String author,
@@ -132,6 +141,9 @@ public class Commit
         this.contributions.add(contribution);
     }
 
+    /**
+     * Add this commit as a child commit for all its parent commits.
+     */
     public void fillChildren()
     {
         for (Commit com : this.getParents()) {

@@ -22,6 +22,9 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
+/**
+ * An extractor that is not really extracting anything, but providing a static dummy history.
+ */
 public class DummyExtractor extends Extractor
 {
     DummyExtractor() throws ExtractionError

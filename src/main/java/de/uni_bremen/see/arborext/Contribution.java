@@ -16,6 +16,12 @@
 
 package de.uni_bremen.see.arborext;
 
+/**
+ * A contribution is a batch of lines in a source file by a certain Commit.
+ *
+ * @see SourceFile
+ * @see Commit
+ */
 public class Contribution
 {
     private int id;
@@ -28,6 +34,13 @@ public class Contribution
 
     static protected int newId = 1;
 
+    /**
+     * @param firstLine the start of the contribution in the source file.
+     * @param lastLine the last line of the contribution in the source file.
+     * @param isAddition is this commit adding lines or taking them away.
+     * @param commit the commit tied to this contribution.
+     * @param sourceFilePath the path to the source file within the repository.
+     */
     public Contribution(
         final int firstLine,
         final int lastLine,
@@ -63,6 +76,9 @@ public class Contribution
         return this.lastLine;
     }
 
+    /**
+     * Get the number of lines this contribution is adding or taking away.
+     */
     public int getLOC()
     {
         return this.lastLine - this.firstLine + 1;

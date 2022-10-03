@@ -19,6 +19,9 @@ package de.uni_bremen.see.arborext;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * A developer contributing code to the repository.
+ */
 public class Developer
 {
     private int id;
@@ -27,6 +30,9 @@ public class Developer
     static protected int newId = 1;
     static protected List<Developer> developers = new ArrayList<Developer> ();
 
+    /**
+     * @param name the developer's name.
+     */
     protected Developer(final String name)
     {
         this.id = newId++;
@@ -55,6 +61,9 @@ public class Developer
         return this.name.equals(dev.getName());
     }
 
+    /**
+     * Return the developer if he/she already exist, create him/her otherwise.
+     */
     static public Developer probeDeveloper(final String name)
     {
         for (Developer dev : developers) {

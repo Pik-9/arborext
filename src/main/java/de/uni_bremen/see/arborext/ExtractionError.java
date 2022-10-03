@@ -18,6 +18,9 @@ package de.uni_bremen.see.arborext;
 
 import java.lang.Exception;
 
+/**
+ * This error is thrown whenever something in the extraction process went wrong.
+ */
 public class ExtractionError extends Exception
 {
     public ExtractionError(final String message)
