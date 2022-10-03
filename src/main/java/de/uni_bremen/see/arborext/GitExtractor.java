@@ -32,6 +32,11 @@ import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * An implementation of Extractor for git repositories.
+ * 
+ * Relies on git being installed on the local machine.
+ */
 public class GitExtractor extends Extractor
 {
     public GitExtractor(final String repository) throws ExtractionError

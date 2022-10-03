@@ -21,12 +21,18 @@ import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * Base class for Version Control System extractors.
+ */
 public abstract class Extractor
 {
     protected String repoUrl;
 
     private int newBranchNr;
 
+    /**
+     * @param repository the url to the online repository to extract from.
+     */
     public Extractor(final String repository) throws ExtractionError
     {
         this.repoUrl = repository;
@@ -35,6 +41,11 @@ public abstract class Extractor
         System.out.println("Done cloning.");
     }
 
+    /**
+     * Recursively go down the commit history and assign a branch number for every commit.
+     *
+     * @param cmmt the commit to start with. Moving from children to parents.
+     */
     private void assignBranchId(Commit cmmt)
     {
         List<Commit> parents = cmmt.getParents();
@@ -67,6 +78,12 @@ public abstract class Extractor
         }
     }
 
+    /**
+     * Extract all commits from the repository.
+     *
+     * @throws ExtractionError if anything went wrong.
+     * @return a list of commits.
+     */
     public List<Commit> extractCommits() throws ExtractionError
     {
         List<Commit> coms = this.getRawCommits();
@@ -95,10 +112,34 @@ public abstract class Extractor
         return coms;
     }
 
+    /**
+     * Clone the repository to local hard drive.
+     *
+     * @throws ExtractionError if anything went wrong.
+     */
     abstract protected void cloneRepository() throws ExtractionError;
+
+    /**
+     * Get raw commits that only contain metadata and need to be enriched with the important stuff later on.
+     *
+     * @throws ExtractionError if anything went wrong.
+     * @return a list of raw commits.
+     */
     abstract protected List<Commit> getRawCommits() throws ExtractionError;
+
+    /**
+     * Enrich a commit with contributions.
+     *
+     * @param commit the commit.
+     * @throws ExtractionError if anything went wrong.
+     */
     abstract public void enrichWithContributions(Commit commit) throws ExtractionError;
 
+    /**
+     * Usually deletes the temporary clone from the hard drive.
+     *
+     * @throws IOException if the temporary repository could not be deleted for whatever reason.
+     */
     public void tidyUp() throws java.io.IOException
     {
         FileUtils.deleteDirectory(new java.io.File("tmprepo"));

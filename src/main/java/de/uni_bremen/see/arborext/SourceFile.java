@@ -19,6 +19,9 @@ package de.uni_bremen.see.arborext;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Represents a source file in the version history.
+ */
 public class SourceFile
 {
     private int id;
@@ -29,6 +32,9 @@ public class SourceFile
     protected static int newId = 1;
     protected static List<SourceFile> pathToFiles = new ArrayList<SourceFile> ();
 
+    /**
+     * @param name the name of the file.
+     */
     protected SourceFile(final String name)
     {
         this.id = newId++;
@@ -54,6 +60,12 @@ public class SourceFile
         return this.contributions;
     }
 
+    /**
+     * Is filename one of the synonyms for this file?
+     *
+     * @param filename the filename to probe.
+     * @return Is it?
+     */
     public boolean goesByThisName(final String filename)
     {
         return this.knownNames.contains(filename);
@@ -73,6 +85,8 @@ public class SourceFile
         }
 
         this.contributions.add(contribution);
+        
+        // TODO: Adjust other contributions if this one is before them.
     }
 
     public String getNames()

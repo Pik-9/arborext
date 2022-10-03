@@ -30,6 +30,9 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Can write a commit history into GXL files.
+ */
 public class GXLWriter
 {
     static private Element createAttrNode(Document doc, final String name, final String type, final String value)
@@ -136,6 +139,17 @@ public class GXLWriter
         return doc;
     }
 
+    /**
+     * Write all provided commits into separate GXL files for each commit.
+     *
+     * @param commits list of commits.
+     * @param extractor the extractor to extract data from the VCS.
+     *
+     * @throws ParserConfigurationException if something went wrong with the parser.
+     * @throws TransformerException if something went wrong with the transformer.
+     * @throws IOException if the files could not be written to or the repository could not be deleted.
+     * @throws ExtractionError if something went wrong with the extraction.
+     */
     static public void writeCommitsInGXL(List<Commit> commits, Extractor extractor)
         throws ParserConfigurationException, TransformerException, IOException, ExtractionError
     {
