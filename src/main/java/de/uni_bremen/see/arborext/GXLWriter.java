@@ -68,6 +68,7 @@ public class GXLWriter
             nodeType.setAttribute("xlink:href", "Developer");
 
             devNode.appendChild(nodeType);
+            devNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", dev.getId()));
             devNode.appendChild(createAttrNode(doc, "Developer.Name", "string", dev.getName()));
             graphNode.appendChild(devNode);
         }
@@ -86,6 +87,7 @@ public class GXLWriter
             fileNode.setAttribute("id", sf.getId());
             Element fileNodeType = doc.createElement("type");
             fileNodeType.setAttribute("xlink:href", "File");
+            fileNode.appendChild(fileNodeType);
 
             fileNode.appendChild(createAttrNode(doc, "Source.Name", "string", sf.getNames()));
             fileNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", sf.getNames()));
@@ -102,6 +104,8 @@ public class GXLWriter
                 Element contNodeType = doc.createElement("type");
                 contNodeType.setAttribute("xlink:href", "Contribution");
 
+                cNode.appendChild(contNodeType);
+                cNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", cont.getId()));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.FirstLine", "int", Integer.toString(cont.getFirstLine())));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.LastLine", "int", Integer.toString(cont.getLastLine())));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.LOC", "int", Integer.toString(cont.getLOC())));
