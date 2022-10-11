@@ -69,6 +69,7 @@ public class GXLWriter
 
             devNode.appendChild(nodeType);
             devNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", dev.getId()));
+            devNode.appendChild(createAttrNode(doc, "Source.Name", "string", dev.getName()));
             devNode.appendChild(createAttrNode(doc, "Developer.Name", "string", dev.getName()));
             graphNode.appendChild(devNode);
         }
@@ -90,7 +91,7 @@ public class GXLWriter
             fileNode.appendChild(fileNodeType);
 
             fileNode.appendChild(createAttrNode(doc, "Source.Name", "string", sf.getNames()));
-            fileNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", sf.getNames()));
+            fileNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", sf.getId()));
             fileNode.appendChild(createAttrNode(doc, "Metric.Number_Of_Calling_Routines", "int", "0"));
             fileNode.appendChild(createAttrNode(doc, "Metric.Number_Of_Called_Routines", "int", "0"));
             fileNode.appendChild(createAttrNode(doc, "Metric.McCabe_Complexity", "int", "1"));
@@ -106,6 +107,7 @@ public class GXLWriter
 
                 cNode.appendChild(contNodeType);
                 cNode.appendChild(createAttrNode(doc, "Linkage.Name", "string", cont.getId()));
+                cNode.appendChild(createAttrNode(doc, "Source.Name", "string", cont.getId()));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.FirstLine", "int", Integer.toString(cont.getFirstLine())));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.LastLine", "int", Integer.toString(cont.getLastLine())));
                 cNode.appendChild(createAttrNode(doc, "Metric.Lines.LOC", "int", Integer.toString(cont.getLOC())));
