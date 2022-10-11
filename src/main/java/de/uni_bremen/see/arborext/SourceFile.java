@@ -84,9 +84,33 @@ public class SourceFile
             this.loc -= contribution.getLOC();
         }
 
+        Contribution secondHalf = null;
+        // Subtractions of lines overlap with the previous additions, but don't take away contributions.
+        if (contribution.isAddition()) {
+            for (Contribution cnt : getContributions()) {
+                if (
+                       cnt.getLastLine() > contribution.getLastLine()
+                    && cnt.getFirstLine() >= contribution.getFirstLine()
+                ) {
+                    int lines = (contribution.isAddition() ? contribution.getLOC() : (-1) * contribution.getLOC());
+                    cnt.setFirstLine(cnt.getFirstLine() + lines);
+                    cnt.setLastLine(cnt.getLastLine() + lines);
+                }
+
+                if (
+                    cnt.getFirstLine() < contribution.getFirstLine()
+                ) {
+                    int delta = cnt.getLastLine() - contribution.getFirstLine();
+                    cnt.setLastLine(contribution.getFirstLine() - 1);
+                    secondHalf = new Contribution(contribution.getLastLine() + 1, contribution.getLastLine() + delta + 1, cnt);
+                }
+            }
+        }
+
+        if (secondHalf != null) {
+            this.contributions.add(secondHalf);
+        }
         this.contributions.add(contribution);
-        
-        // TODO: Adjust other contributions if this one is before them.
     }
 
     public String getNames()

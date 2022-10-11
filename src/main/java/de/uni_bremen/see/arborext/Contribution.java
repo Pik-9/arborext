@@ -61,6 +61,28 @@ public class Contribution
         this.commit.addContribution(this);
     }
 
+    /**
+     * Copy constructor.
+     * Necessary for creating the second half of a contribution when cutting in half.
+     *
+     * @param firstLine the first line.
+     * @param lastLine the last line.
+     * @param other the contribution that gets cut.
+     */
+    public Contribution(
+        final int firstLine,
+        final int lastLine,
+        final Contribution other
+    ) {
+        this.id = newId++;
+        this.firstLine = firstLine;
+        this.lastLine = lastLine;
+        this.addition = true;
+        this.newlyCreated = false;
+        this.commit = other.commit;
+        this.sfile = other.sfile;
+    }
+
     public String getId()
     {
         return "C" + Integer.toString(this.id);
@@ -74,6 +96,16 @@ public class Contribution
     public int getLastLine()
     {
         return this.lastLine;
+    }
+
+    public void setFirstLine(final int line)
+    {
+        this.firstLine = line;
+    }
+
+    public void setLastLine(final int line)
+    {
+        this.lastLine = line;
     }
 
     /**
