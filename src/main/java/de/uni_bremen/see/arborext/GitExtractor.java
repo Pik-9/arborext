@@ -142,20 +142,26 @@ public class GitExtractor extends Extractor
     }
 
     @Override
-    public void enrichWithContributions(Commit commit) throws ExtractionError
+    public void enrichWithContributions(Commit commit) throws ExtractionError, NeedToSetBranch
     {
         // Merge commit don't have any contributions, but change the branch Id of all
         // previous contributions.
 
         SourceFile.setEverythingOld();
 
+        // If this is a merge commit, signal the calling method that
+        // all commits of the parent branches need to get their branch
+        // ids adjusted.
         if (commit.isMerge()) {
+            List<Integer> pids = new ArrayList<Integer> ();
             for (Commit parent : commit.getParents()) {
-                // TODO: The whole branch, not just one commit.
                 parent.setBranchId(commit.getBranchId());
+                if (parent.getBranchId() != commit.getBranchId()) {
+                    pids.add(parent.getBranchId());
+                }
             }
 
-            return;
+            throw new NeedToSetBranch(commit.getBranchId(), pids);
         }
 
         ProcessBuilder showProc = new ProcessBuilder();

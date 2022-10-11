@@ -172,7 +172,13 @@ public class GXLWriter
         int commitNr = 0;
 
         for (Commit commit : commits) {
-            extractor.enrichWithContributions(commit);
+            try {
+                extractor.enrichWithContributions(commit);
+            } catch (NeedToSetBranch ntsb) {
+                for (Commit cmmt : commits) {
+                    ntsb.editCommitIfNecessary(cmmt);
+                }
+            }
 
             Document doc = docFromCommit(commit, builder);
             DOMSource source = new DOMSource(doc);

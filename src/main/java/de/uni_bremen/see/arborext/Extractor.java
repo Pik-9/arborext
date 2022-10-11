@@ -133,7 +133,7 @@ public abstract class Extractor
      * @param commit the commit.
      * @throws ExtractionError if anything went wrong.
      */
-    abstract public void enrichWithContributions(Commit commit) throws ExtractionError;
+    abstract public void enrichWithContributions(Commit commit) throws ExtractionError, NeedToSetBranch;
 
     /**
      * Usually deletes the temporary clone from the hard drive.
