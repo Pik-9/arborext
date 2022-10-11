@@ -115,18 +115,8 @@ public class SourceFile
 
     public String getNames()
     {
-        if (this.knownNames.size() > 1) {
-            String ret = "";
-            for (int ii = 0; ii < this.knownNames.size(); ++ii) {
-                ret += this.knownNames.get(ii);
-                if(ii < this.knownNames.size() - 1) {
-                    ret += ", ";
-                }
-            }
-            return ret;
-        } else {
-            return this.knownNames.get(0);
-        }
+        String[] parts = this.knownNames.get(0).split("/");
+        return parts[parts.length - 1];
     }
 
     static public void setEverythingOld()
