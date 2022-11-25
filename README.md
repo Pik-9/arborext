@@ -13,7 +13,7 @@ a batch of numbered GXL files in the **current directory**.
 **tmprepo** will be deleted afterwards.
 
 ## Building
-You need a working installation of [Mavan](https://maven.apache.org/) for this build.
+You need a working installation of [Maven](https://maven.apache.org/) for this build.
 
 From the project root it is as simple as:
 ```bash
